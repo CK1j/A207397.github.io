@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Website</title>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: var(--text-main);
+        background-color: var(--bg-color);
+    }
+
+    body {
+        line-height: 1.6;
+        padding-top: 70px;
+    }
+
+    /* Sticky Top Navigation Bar */
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: var(--nav-bg);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        z-index: 1000;
+        backdrop-filter: blur(8px);
+    }
+
+    nav {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+    }
+
+    .nav-logo {
+        font-weight: 800;
+        font-size: 1.3rem;
+        color: var(--primary-color);
+        text-decoration: none;
+        letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 24px;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: var(--text-main);
+        font-size: 0.95rem;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .nav-links a:hover {
+        color: var(--primary-color);
+    }
+
+    /* Base Section Layout */
+    section {
+        padding: 80px 20px 40px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        margin-bottom: 35px;
+        position: relative;
+        padding-bottom: 12px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 60px;
+        height: 5px;
+        background-color: var(--primary-color);
+        border-radius: 3px;
+    }
+
+    /* Home/Hero Layout */
+    #home {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 40px;
+        align-items: center;
+        padding-top: 40px;
+    }
+
+    @media (min-width: 768px) {
+        #home {
+            grid-template-columns: 1.6fr 1fr;
+        }
+    }
+
+    .hero-text h1 {
+        font-size: 3.2rem;
+        line-height: 1.15;
+        margin-bottom: 20px;
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+
+    .hero-text h1 span {
+        color: var(--primary-color);
+    }
+
+    .intro-p {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        margin-bottom: 25px;
+    }
+
+    .profile-meta {
+        background-color: var(--card-bg);
+        padding: 30px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        border-left: 6px solid var(--primary-color);
+    }
+
+    .meta-item {
+        margin-bottom: 12px;
+        font-size: 1.05rem;
+    }
+
+    .meta-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .meta-item strong {
+        color: var(--text-main);
+        display: inline-block;
+        width: 120px;
+    }
+
+    .sdg-box {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        margin-top: 25px;
+        box-shadow: 0 4px 15px rgba(225, 20, 69, 0.2);
+    }
+
+    .sdg-box h3 {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
+
+    .sdg-box p {
+        font-size: 1rem;
+        opacity: 0.95;
+        line-height: 1.5;
+    }
+
+    /* Cards Layout Engine */
+    .card-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    @media (min-width: 768px) {
+        .card-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (min-width: 1024px) {
+        #labs .card-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .card {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        display: flex;
+        flex-direction: column;
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+
+    .video-wrapper {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        background-color: #000;
+    }
+
+    .video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
+    .card-body {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .card-title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text-main);
+    }
+
+    .card-desc {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .card-reflection {
+        background-color: #F8F9FA;
+        padding: 16px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        border-top: 4px solid var(--primary-color);
+    }
+
+    .card-reflection strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--text-main);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Buttons styling */
+    .btn-github {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #24292E;
+        color: white;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        transition: var(--transition);
+        gap: 10px;
+    }
+
+    .btn-github:hover {
+        background-color: var(--primary-color);
+        box-shadow: 0 4px 12px rgba(225, 20, 69, 0.2);
+    }
+
+    /* Reflection styling */
+    .reflection-card {
+        background-color: var(--card-bg);
+        padding: 35px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        border-left: 6px solid var(--primary-color);
+        font-size: 1.15rem;
+        line-height: 1.8;
+    }
+
+    /* Skills Pill Engine */
+    .skills-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .skill-node {
+        background-color: var(--card-bg);
+        border: 1px solid rgba(0,0,0,0.06);
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+        transition: var(--transition);
+    }
+
+    .skill-node:hover {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(225, 20, 69, 0.15);
+    }
+
+    /* Resources Styling */
+    .resources-card {
+        background-color: var(--card-bg);
+        padding: 35px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    }
+
+    .resources-list {
+        list-style-type: none;
+        margin-bottom: 25px;
+    }
+
+    .resources-list li {
+        padding: 10px 0;
+        border-bottom: 1px solid #F1F3F5;
+        display: flex;
+        align-items: center;
+        font-size: 1.05rem;
+    }
+
+    .resources-list li::before {
+        content: "✓";
+        color: var(--primary-color);
+        font-weight: bold;
+        margin-right: 15px;
+    }
+
+    .resources-list li:last-child {
+        border-bottom: none;
+    }
+
+    .ai-acknowledgement {
+        background-color: #FFF5F5;
+        border: 1px dashed var(--primary-color);
+        padding: 20px;
+        border-radius: 8px;
+        font-size: 1rem;
+        color: #C92A2A;
+        line-height: 1.6;
+    }
+
+    /* Footer Structural Styling */
+    footer {
+        background-color: #1A1D20;
+        color: white;
+        text-align: center;
+        padding: 40px 20px;
+        margin-top: 80px;
+        font-size: 0.95rem;
+    }
+
+    footer p {
+        opacity: 0.75;
+        margin-bottom: 8px;
+    }
+
+    footer p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Mobile Media Query Optimization */
+    @media (max-width: 600px) {
+        nav {
+            flex-direction: column;
+            gap: 12px;
+        }
+        .nav-links {
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        body {
+            padding-top: 110px;
+        }
+        .hero-text h1 {
+            font-size: 2.4rem;
+        }
+    }
+</style>
+
+```
+
+```
+<!-- Sticky Navigation Hierarchy Bar -->
+<header>
+    <nav>
+        <a href="#home" class="nav-logo">ChenKai.Dev</a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#labs">Labs</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#reflection">Reflection</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#resources">Resources</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <!-- Home Profile Section -->
+    <section id="home">
+        <div class="hero-text">
+            <h1>E-Portfolio Blueprint <br>by <span>Chen Kai</span></h1>
+            <p class="intro-p">I am a passionate mobile application developer focused on building secure, transparent, and impactful digital solutions that address modern global challenges.</p>
+            <div class="sdg-box">
+                <h3>Impact Framework Alignment: SDG 10</h3>
+                <p>The UN’s blueprint to reduce inequalities within and among countries, driving my commitment to build transparent digital ledger frameworks to secure equal digital financial accessibility for all segments of society.</p>
+            </div>
+        </div>
+        <div class="profile-meta">
+            <div class="meta-item"><strong>Matric No:</strong> A207397</div>
+            <div class="meta-item"><strong>Programme:</strong> Software Engineering</div>
+            <div class="meta-item"><strong>Instructor:</strong> Dr. IZWAN</div>
+            <div class="meta-item"><strong>Academic Year:</strong> 2026</div>
+        </div>
+    </section>
+
+    <!-- Academic Lab Milestones Section -->
+    <section id="labs">
+        <h2 class="section-title">Lab Foundations</h2>
+        <div class="card-grid">
+            
+            <!-- Lab 1 Milestone -->
+            <div class="card">
+                <div class="video-wrapper">
+                    <iframe src="[https://www.youtube.com/embed/w4iiy0z6gFE](https://www.youtube.com/embed/w4iiy0z6gFE)" allowfullscreen></iframe>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Lab 1: UI Foundations</h3>
+                    <p class="card-desc">Explored Native Android layouts utilizing Jetpack Compose's modern declarative code paradigms and UI element controls.</p>
+                    <div class="card-reflection">
+                        <strong>Reflection</strong> Explored the fundamentals of declarative UI design using Jetpack Compose, mastering row, column, and basic state management.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lab 2 Milestone -->
+            <div class="card">
+                <div class="video-wrapper">
+                    <iframe src="[https://www.youtube.com/embed/b2lXebsEqxc](https://www.youtube.com/embed/b2lXebsEqxc)" allowfullscreen></iframe>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Lab 2: Interaction Logic</h3>
+                    <p class="card-desc">Implemented custom click handling mechanisms, state hosting principles, and reactive architectural updates inside Composables.</p>
+                    <div class="card-reflection">
+                        <strong>Reflection</strong> Implemented dynamic user interactions and state hosting, learning how to handle state updates gracefully within screen composables.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lab 3 Milestone -->
+            <div class="card">
+                <div class="video-wrapper">
+                    <iframe src="[https://www.youtube.com/embed/iI9xm_-7vec](https://www.youtube.com/embed/iI9xm_-7vec)" allowfullscreen></iframe>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Lab 3: Material Design 3</h3>
+                    <p class="card-desc">Styled unified light/dark custom branding themes utilizing complex Material Design 3 engineering color tokens and typographies.</p>
+                    <div class="card-reflection">
+                        <strong>Reflection</strong> Applied Material Design 3 guidelines to create a beautifully branded, cohesive user interface with customized color palettes and professional typographies.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lab 4 Milestone -->
+            <div class="card">
+                <div class="video-wrapper">
+                    <iframe src="[https://www.youtube.com/embed/lH6jH4ByRsU](https://www.youtube.com/embed/lH6jH4ByRsU)" allowfullscreen></iframe>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Lab 4: Jetpack Navigation</h3>
+                    <p class="card-desc">Constructed safe multidirectional Jetpack Composable graphs supporting typed safe route tracking and seamless parameter passings.</p>
+                    <div class="card-reflection">
+                        <strong>Reflection</strong> Built a multi-screen app architecture using Jetpack Navigation, mastering route arguments and structured navigation graphs.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lab 5 Milestone -->
+            <div class="card">
+                <div class="video-wrapper">
+                    <iframe src="[https://www.youtube.com/embed/3L0lSHw1pFs](https://www.youtube.com/embed/3L0lSHw1pFs)" allowfullscreen></iframe>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Lab 5: Room Data Layer</h3>
+                    <p class="card-desc">Created standard offline persistence structures incorporating data access objects, coroutines, and automated mapping schemas.</p>
+                    <div class="card-reflection">
+                        <strong>Reflection</strong> Integrated local persistence using Room Database, allowing users to safely store financial transactions on-device with offline accessibility.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Capstone Production Projects Section -->
+    <section id="projects">
+        <h2 class="section-title">Capstone Projects</h2>
+        <div class="card-grid">
+
+            <!-- Project 1 Module -->
+            <div class="card">
+                <div class="video-wrapper">
+                    <iframe src="[https://www.youtube.com/embed/g7J-J1V4HOw](https://www.youtube.com/embed/g7J-J1V4HOw)" allowfullscreen></iframe>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Project 1: Wize Finance Base</h3>
+                    <p class="card-desc"><strong>Problem Statement:</strong> Lack of intuitive digital budget tracking and personal financial asset monitoring tools for general consumers to bridge asset allocation information inequalities.</p>
+                    <div class="card-reflection">
+                        <strong>Lessons Learned</strong> Mastered state sharing across multiple screens using an overarching ViewModel and engineered clean UI flows with structured backstack management.
+                    </div>
+                    <a href="[https://github.com/CK1j/A207397_CHENKAI_DRIZWAN_Project1](https://github.com/CK1j/A207397_CHENKAI_DRIZWAN_Project1)" target="_blank" class="btn-github">View on GitHub</a>
+                </div>
+            </div>
+
+            <!-- Project 2 Module -->
+            <div class="card">
+                <div class="video-wrapper">
+                    <iframe src="[https://www.youtube.com/embed/PBhuveexbRc](https://www.youtube.com/embed/PBhuveexbRc)" allowfullscreen></iframe>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Project 2: Wize Finance Connected Ecosystem</h3>
+                    <p class="card-desc"><strong>Problem Statement:</strong> Financial corruption and a lack of transparent audit tracking in institutional fund routing and public grant distribution.</p>
+                    <div class="card-reflection">
+                        <strong>Lessons Learned</strong> Successfully unified four major Android technical pillars: Room for offline storage, Retrofit for real-time compliance validation, CameraX for hardware-level QR verification, and Firebase Firestore for a transparent public cloud ledger.
+                    </div>
+                    <a href="[https://github.com/CK1j/A207397_CHENKAI_DRIZWAN_Project2](https://github.com/CK1j/A207397_CHENKAI_DRIZWAN_Project2)" target="_blank" class="btn-github">View on GitHub</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Personal Journey Reflection Section -->
+    <section id="reflection">
+        <h2 class="section-title">Learning Journey Reflection</h2>
+        <div class="reflection-card">
+            <p>My learning journey from Lab 1 to Project 2 has been incredibly transformative. I evolved from designing static, single-screen layouts into architecting complex, production-ready, fully connected Android applications. Overcoming real-world integration hurdles, such as dependency alignment and asynchronous networking, deeply enhanced my problem-solving skills and solidified my confidence in modern Android engineering.</p>
+        </div>
+    </section>
+
+    <!-- Technical Skill Pill Section -->
+    <section id="skills">
+        <h2 class="section-title">Skills & Tech Stack</h2>
+        <div class="skills-container">
+            <div class="skill-node">Kotlin</div>
+            <div class="skill-node">Jetpack Compose</div>
+            <div class="skill-node">Room Database</div>
+            <div class="skill-node">Retrofit REST API</div>
+            <div class="skill-node">Firebase Firestore</div>
+            <div class="skill-node">CameraX Framework</div>
+            <div class="skill-node">MVVM Architecture</div>
+            <div class="skill-node">Git & GitHub Integration</div>
+        </div>
+    </section>
+
+    <!-- Used Engineering Libraries & Resource Links -->
+    <section id="resources">
+        <h2 class="section-title">Resources & Engineering Credits</h2>
+        <div class="resources-card">
+            <ul class="resources-list">
+                <li><strong>Retrofit 2 & GSON:</strong> Remotely mapping compliance microservices and real-time live currency exchanges.</li>
+                <li><strong>Room Persistence Engine:</strong> Relational reactive on-device data modeling and transaction logging.</li>
+                <li><strong>CameraX Hardware Library:</strong> Seamless binding of hardware sensor feeds for institutional QR validation.</li>
+                <li><strong>Firebase Firestore Cloud SDK:</strong> Managing distributed, transparent global cloud ledgers across live instances.</li>
+                <li><strong>Jetpack Navigation:</strong> Multi-destination UI backstack control graphs.</li>
+            </ul>
+            <div class="ai-acknowledgement">
+                <strong>Acknowledgement of AI Collaboration:</strong> I explicitly acknowledge the valuable assistance of AI tooling in resolving complex Gradle version catalog conflicts, organizing clean asynchronous coroutine flows, and debugging build package namespace collisions during modular ecosystem architecture refactoring.
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Page Footer Meta Element -->
+<footer>
+    <p>&copy; 2026 Chen Kai | Matric No: A207397</p>
+    <p>Software Engineering Programme &mdash; Dr. IZWAN</p>
+</footer>
+
+</style>
+</head>
+<body>
+<h1 style="padding:20px">Portfolio Website</h1>
+<p style="padding:0 20px">The uploaded file appears to contain CSS/styles. Replace this placeholder content with your page HTML if needed.</p>
+</body>
+</html>
